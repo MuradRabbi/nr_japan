@@ -1,0 +1,77 @@
+
+import 'package:get/get.dart';
+
+class LocaleString extends Translations {
+  @override
+  // TODO: implement keys
+  Map<String, Map<String, String>> get keys => {
+    //ENGLISH LANGUAGE
+    'en_US': {
+      'new_request': 'NEW REQUEST',
+      'my_offers': 'MY OFFERS',
+      'see_current_races': 'SEE CURRENT RACES',
+      'race_history': 'RACE HISTORY',
+      'starting_point': 'Starting point',
+      'arrival_point': 'Arrival point',
+      'type_of_trailer': 'Type of trailer',
+      'load_weight': 'Load weight',
+      'date_of_departure': 'Date of departure',
+      'time_of_departure': 'Time of departure',
+      'registration_no': 'Registration',
+      'brand': 'Brand',
+      'nature_of_the_load': 'Nature of the load',
+      'type_of_trailer': 'Type of trailer',
+      'service_type': 'Service type',
+      'note': 'Note',
+      'request_list': 'REQUEST LIST',
+      'send': 'Send',
+      'job_list': 'JOB LIST',
+      'return': 'Return',
+      'enter_your_secret_code': 'Enter your secret code',
+      'next': 'Next',
+      'log_in': 'Log in',
+      'register': 'Register',
+      'settings': 'Settings',
+      'language': 'Language',
+      'accept': 'Accept',
+      'reject': 'Reject',
+      'enter_your_phone_number': 'Enter your phone number',
+      'your_request_has_been_registered_you_will_be_notified_of_receipt_new_offers': 'Your request has been registered You will be notified of receipt new offers.',
+      'changelang': 'Change Language'
+    },
+    //French LANGUAGE
+    'fr_CA': {
+      'new_request': 'NOUVELLE DEMANDE',
+      'my_offers': 'MES OFFRES',
+      'see_current_races': 'VOIR COURSES EN COURS',
+      'race_history': 'HISTORIQUE DES COURSES',
+      'starting_point': 'Point de départ',
+      'arrival_point': 'Point d’arrivée',
+      'type_of_trailer': 'Type de remorque',
+      'load_weight': 'Poids du chargement',
+      'date_of_departure': 'Date de départ',
+      'time_of_departure': 'Heure de départ',
+      'registration_no': 'Immatriculation',
+      'brand': 'Marque',
+      'nature_of_the_load': 'Nature du chargement',
+      'type_of_trailer': 'Type de remorque',
+      'service_type': 'Service type',
+      'note': 'Note',
+      'request_list': 'Liste des demandes',
+      'send': 'Envoyer',
+      'job_list': 'Liste d emplois',
+      'return': 'Retour',
+      'enter_your_secret_code': 'Entrez votre code secret',
+      'next': 'suivant',
+      'log_in': 'Connexion',
+      'register': 'Sinscrire',
+      'settings': 'Réglages',
+      'language': 'Langue',
+      'accept': 'Accepter',
+      'reject': 'Rejecter',
+      'enter_your_phone_number': 'Entrez votre numero de téléphone',
+      'your_request_has_been_registered_you_will_be_notified_of_receipt_new_offers': 'Votre demande a été enregistrée Vous serez notifié des réception de nouvelles offres.',
+      'changelang': 'भाषा बदलो',
+    },
+  };
+}
