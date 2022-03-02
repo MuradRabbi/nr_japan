@@ -2,6 +2,8 @@
 
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
+import '../Screens/Dashboard/Binding/dashboard_binding.dart';
+import '../Screens/Dashboard/View/dashboard_screen_view.dart';
 import '../Screens/Login/Binding/login_binding.dart';
 import '../Screens/Login/View/login_screen_view.dart';
 import '../Screens/SplashScreen/Binding/splash_screen_binding.dart';
@@ -25,6 +27,12 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => LoginScreenView(),
       binding: LoginBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.DASHBOARD,
+      page: () => DashboardScreenView(),
+      binding: DashboardBinding(),
     ),
     //
     // GetPage(

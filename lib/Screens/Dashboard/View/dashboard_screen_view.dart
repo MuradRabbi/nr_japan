@@ -13,6 +13,7 @@ class DashboardScreenView extends GetView<DashboardController> {
     SizeConfig().init(context);
     return Scaffold(
         backgroundColor: AppColors.appBackgroundColor,
+        appBar: customAppBar(),
         body: Container(
           height: MediaQuery
               .of(context)
@@ -40,7 +41,7 @@ class DashboardScreenView extends GetView<DashboardController> {
                       height: getProportionateScreenHeight(30),
                       width: getProportionateScreenHeight(30),
                       child:
-                      Image.asset("assets/icons/info-icon.png"),
+                      Image.asset("assets/images/info-icon.png"),
                     ),
                     SizedBox(
                       width: getProportionateScreenWidth(15),
@@ -85,7 +86,7 @@ class DashboardScreenView extends GetView<DashboardController> {
                 padding: EdgeInsets.only(top: 18, bottom: 18),
                 height: 15,
                 width: 15,
-                child: Image.asset("assets/icons/drawer-icon.png"),
+                child: Image.asset("assets/images/drawer-icon.png"),
               ),
             ),
       ),
@@ -130,7 +131,7 @@ class DashboardScreenView extends GetView<DashboardController> {
               Container(
                 height: getProportionateScreenHeight(35),
                 width: getProportionateScreenWidth(100),
-                child: Image.asset("assets/icons/orange-arrow.png"),
+                child: Image.asset("assets/images/checkin-arrow.png"),
               ),
               SizedBox(
                 height: getProportionateScreenHeight(10),

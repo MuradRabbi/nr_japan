@@ -10,6 +10,7 @@ import '../../../Utilities/app_colors.dart';
 import '../../../Utilities/app_fonts.dart';
 import '../../../Utilities/app_pages.dart';
 import '../../../Utilities/size_config.dart';
+import '../../../Utilities/utils.dart';
 import '../Controller/login_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -101,7 +102,21 @@ class LoginScreenView extends GetView<LoginController> {
                 ),
                 InkWell(
                     onTap: () {
-                      Get.toNamed(Routes.FORGOT_PASSWORD);
+                      if(emailTextController.text.isEmpty){
+                        Utils().showToast(
+                            "please_provide_your_email".tr, true);
+                      } else if (!Utils().checkEmail(emailTextController.text)){
+                        Utils().showToast("please_provide_a_valid_email_address", true);
+                      } else if (passwordTextController.text.isEmpty){
+                        Utils().showToast("please_provide_your_password", true);
+                      } else {
+                        Map<String, dynamic> bodyLogin = {
+                          "authentication" : APIConstants.AUTHENTICATION,
+                          "email" : emailTextController.text.trim(),
+                          "password" : passwordTextController.text.trim()
+                        };
+                        controller.login(bodyLogin);
+                      }
                     },
                     child: Text(
                       "Forgot Password?",
@@ -117,7 +132,26 @@ class LoginScreenView extends GetView<LoginController> {
                     margin: EdgeInsets.symmetric(horizontal: 40),
                     child: InkWell(
                       onTap: () {
-                         Get.to(Routes.DASHBOARD);
+                        if (emailTextController.text.isEmpty) {
+                          Utils().showToast(
+                              "please_provide_your_email".tr, true);
+                        } else if (!Utils()
+                            .checkEmail(emailTextController.text)) {
+                          Utils().showToast(
+                              "please_provide_a_valid_email_address".tr,
+                              true);
+                        } else if (passwordTextController.text.isEmpty) {
+                          Utils().showToast(
+                              "please_provide_your_password".tr, true);
+                        } else {
+                          Map<String, dynamic> bodyLogin = {
+                            "authentication": APIConstants.AUTHENTICATION,
+                            "email": emailTextController.text.trim(),
+                            "password": passwordTextController.text.trim()
+                          };
+                          controller.login(bodyLogin);
+                        }
+
                       },
                       child: BottomButton(
                           title: "LOGIN",
