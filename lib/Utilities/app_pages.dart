@@ -1,6 +1,8 @@
 
 
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:nr_japan/Screens/Forget_Password/Binding/forget_password_binding.dart';
+import 'package:nr_japan/Screens/Forget_Password/View/forget_password_screen.dart';
 
 import '../Screens/Dashboard/Binding/dashboard_binding.dart';
 import '../Screens/Dashboard/View/dashboard_screen_view.dart';
@@ -35,11 +37,11 @@ class AppPages {
       binding: DashboardBinding(),
     ),
     //
-    // GetPage(
-    //   name: _Paths.CHECK_IN,
-    //   page: () => CheckInScreenView(),
-    //   binding: CheckInBinding(),
-    // ),
+    GetPage(
+      name: _Paths.CHECK_IN,
+      page: () => ForgotPasswordScreenView(),
+      binding: ForgotPasswordBinding(),
+    ),
     //
     // GetPage(
     //   name: _Paths.DASHBOARD,
