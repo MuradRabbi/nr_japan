@@ -4,8 +4,11 @@ class APIConstants {
 
   //Live Server
   static const String API_BASE_URL = "https://cubic-dev.anvs.xyz/api/v1/";
+  static const String Ecom_API_BASE_URL = "http://api.ecom.anvs.xyz/api/v1/";
   static const String AUTHENTICATION = "cubic_project_v1.app";
 
+
+  static const String offer = Ecom_API_BASE_URL + "offers";
   static const String login = API_BASE_URL + "login";
   static const String logout = API_BASE_URL + "logout";
   static const String forgotPassword = API_BASE_URL + "forgot-password";

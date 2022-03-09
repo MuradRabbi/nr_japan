@@ -10,6 +10,8 @@ class Repository{
 
 
   Future<ResponseObject> commonSyncRequest(Map <String, dynamic> parameters) => _operatorAuthService.commonSyncRequest(parameters);
+  Future<ResponseObject> profileDetailsRequest(Map<String, dynamic> parameters) => _operatorAuthService.profileDetailsRequest(parameters);
+  Future<ResponseObject> logoutRequest() => _operatorAuthService.logoutRequest();
 
 }
 

@@ -1,76 +1,154 @@
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:nr_japan/Screens/Dashboard/Controller/dashboard_controller.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../../../CustomWidgets/no_internet_connection.dart';
+import '../../../Models/attendence_model.dart';
+import '../../../NavigationDrawer/navigation_drawer.dart';
+import '../../../NetworkCheck/my_connectivity.dart';
 import '../../../Utilities/app_colors.dart';
+import '../../../Utilities/app_fonts.dart';
+import '../../../Utilities/shared_perf_keys.dart';
 import '../../../Utilities/size_config.dart';
+import '../Controller/dashboard_controller.dart';
 
-class DashboardScreenView extends GetView<DashboardController> {
 
+class DashboardScreenView extends StatefulWidget {
+  @override
+  _DashboardScreenViewState createState() => _DashboardScreenViewState();
+}
+
+class _DashboardScreenViewState extends State<DashboardScreenView>
+    with AutomaticKeepAliveClientMixin {
+  final DashboardController dashboardController = Get.put(DashboardController());
+
+  bool isOnline = true;
+  Map _source = {ConnectivityResult.wifi: true};
+  final MyConnectivity _connectivity = MyConnectivity.instance;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      if (mounted) {
+        setState(() => _source = source);
+      }
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-        backgroundColor: AppColors.appBackgroundColor,
-        appBar: customAppBar(),
-        body: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Spacer(),
-              checkInButton(),
-              Spacer(),
-              Container(
-                height: getProportionateScreenHeight(55),
-                color: AppColors.skyBlueColor,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: getProportionateScreenWidth(20),
-                    ),
-                    Container(
-                      height: getProportionateScreenHeight(30),
-                      width: getProportionateScreenHeight(30),
-                      child:
-                      Image.asset("assets/images/info-icon.png"),
-                    ),
-                    SizedBox(
-                      width: getProportionateScreenWidth(15),
-                    ),
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width - 80,
-                      child: Text(
-                        "Text",
-                        // "${dashboardController.localStorage.read(LocalStorageKeys
-                        //     .checkInText)}",
-                        style: TextStyle(
-                            color: AppColors.blackTextColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    )
-                  ],
-                ),
-              ),
 
+    switch (_source.keys.toList()[0]) {
+      case ConnectivityResult.mobile:
+        isOnline = true;
+        break;
+      case ConnectivityResult.wifi:
+        isOnline = true;
+        break;
+      case ConnectivityResult.none:
+        isOnline = false;
+        break;
+      default:
+        isOnline = true;
+    }
+
+    return isOnline
+        ? Scaffold(
+        drawer: NavigationDrawer(),
+        appBar: customAppBar(),
+        backgroundColor: AppColors.appBackgroundColor,
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Container(
+                child: Obx(() =>
+                dashboardController.isLoading.value == false
+                    ? Container(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Spacer(),
+
+                      // dashboardController.todaysCheckinResponseModel.value.data!
+                      //     .alreadyCheckout == true ? todayStatusSection(
+                      //     dashboardController.todaysCheckinResponseModel.value.data!
+                      //         .attendances) :
+                      // dashboardController.todaysCheckinResponseModel.value.data!
+                      //     .alreadyCheckin ==
+                      //     true
+                      //     ? checkOutButton(context)
+                      //     : checkInButton(),
+                      Spacer(),
+                      Container(
+                        height: getProportionateScreenHeight(55),
+                        color: AppColors.skyBlueColor,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: getProportionateScreenWidth(20),
+                            ),
+                            Container(
+                              height: getProportionateScreenHeight(30),
+                              width: getProportionateScreenHeight(30),
+                              child:
+                              Image.asset("assets/images/info-icon.png"),
+                            ),
+                            SizedBox(
+                              width: getProportionateScreenWidth(15),
+                            ),
+                            Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width - 80,
+                              child: Text(
+                                "${dashboardController.localStorage.read(LocalStorageKeys
+                                    .checkInText)}",
+                                style: TextStyle(
+                                    color: AppColors.blackTextColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+                    : Center(
+                  child: CircularProgressIndicator(),
+                )),
+              )
             ],
           ),
-        )
+        ))
+        : Scaffold(body: NoInternetConnection());
+  }
 
-    );
-
+  Future<void> _refreshData() async {
+    print('refreshing data...');
+    // dashboardController.todaysCheckInRequest();
   }
 
   AppBar customAppBar() {
@@ -100,10 +178,10 @@ class DashboardScreenView extends GetView<DashboardController> {
     );
   }
 
-
   InkWell checkInButton() {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        // dashboardController.permissionServiceCall();
       },
       child: Container(
         height: getProportionateScreenHeight(120),
@@ -131,7 +209,7 @@ class DashboardScreenView extends GetView<DashboardController> {
               Container(
                 height: getProportionateScreenHeight(35),
                 width: getProportionateScreenWidth(100),
-                child: Image.asset("assets/images/checkin-arrow.png"),
+                child: Image.asset("assets/icons/orange-arrow.png"),
               ),
               SizedBox(
                 height: getProportionateScreenHeight(10),
@@ -153,7 +231,7 @@ class DashboardScreenView extends GetView<DashboardController> {
   InkWell checkOutButton(BuildContext context) {
     return InkWell(
       onTap: () async {
-        // _showCheckOutDialog(context);
+        _showCheckOutDialog(context);
       },
       child: Container(
         height: getProportionateScreenHeight(120),
@@ -199,38 +277,119 @@ class DashboardScreenView extends GetView<DashboardController> {
       ),
     );
   }
+
+  todayStatusSection(Attendances? attendances) {
+    return Container(
+      child: Column(
+        children: [
+
+          Container(
+            height: getProportionateScreenHeight(100),
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            color: AppColors.skyBlueColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Today Date", textScaleFactor: 1.0,
+                  style: TextStyle(color: AppColors.blackTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: AppFonts.robotoSlabText),),
+                SizedBox(height: getProportionateScreenHeight(8),),
+                Text("${attendances!.checkDate}", textScaleFactor: 1.0,
+                  style: TextStyle(color: AppColors.blackTextColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: AppFonts.robotoSlabText),),
+              ],
+            ),
+          ),
+
+          Container(
+            height: getProportionateScreenHeight(100),
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            color: AppColors.skyBlueColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Check In Time", textScaleFactor: 1.0,
+                  style: TextStyle(color: AppColors.blackTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      fontFamily: AppFonts.robotoSlabText),),
+                SizedBox(height: getProportionateScreenHeight(8),),
+                Text("${attendances!.checkInTime}", textScaleFactor: 1.0,
+                  style: TextStyle(color: AppColors.blackTextColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: AppFonts.robotoSlabText),),
+              ],
+            ),
+          ),
+
+          Container(
+            height: getProportionateScreenHeight(100),
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            color: AppColors.skyBlueColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Check Out Time", textScaleFactor: 1.0,
+                  style: TextStyle(color: AppColors.blackTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      fontFamily: AppFonts.robotoSlabText),),
+                SizedBox(height: getProportionateScreenHeight(8),),
+                Text("${attendances!.checkOutTime}", textScaleFactor: 1.0,
+                  style: TextStyle(color: AppColors.blackTextColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: AppFonts.robotoSlabText),),
+              ],
+            ),
+          )
+
+        ],
+      ),
+    );
+  }
+
+
+  _showCheckOutDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text("Check Out"),
+            content: Text("Are you sure to check out"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text(
+                  "Check Out",
+                  style: TextStyle(color: AppColors.homePageRedButtonColor),
+                ),
+                onPressed: () async {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  // await dashboardController.checkoutRequest(dashboardController.todaysCheckinResponseModel.value.data!.attendances);
+                },
+              ),
+            ],
+          );
+        });
+  }
 }
-
-
-// class DashboardView extends StatefulWidget {
-//   @override
-//   _DashboardViewState createState() => _DashboardViewState();
-// }
-//
-// class _DashboardViewState extends State<DashboardView>
-//     with AutomaticKeepAliveClientMixin {
-//   final DashboardController dashboardController = Get.put(DashboardController());
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     SizeConfig().init(context);
-//     return Scaffold(
-//       backgroundColor: AppColors.appBackgroundColor,
-//       appBar: customAppBar(),
-//       body:  ,
-//     );
-//   }
-//
-//   Future<void> _refreshData() async {
-//     print('refreshing data...');
-//     // dashboardController.todaysCheckInRequest();
-//   }
-//
-//
-//
-//
-//
-//
-//
-// }

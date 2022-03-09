@@ -5,5 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DashboardController extends GetxController {
-
+  var isLoading = false.obs;
+  final localStorage = GetStorage();
 }
